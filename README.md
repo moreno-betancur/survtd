@@ -1,2 +1,2 @@
 # survtd
-Survival analysis hazard models with time-dependent covariates
+Survival analysis with time-dependent covariates

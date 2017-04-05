@@ -102,9 +102,11 @@ simjm_benchmark<-function(data,surv_model="Cox",marker_model="RE",corr="Low")
   datSurv$tstart[datSurv$tstart==-1]<-0
   datSurv <- merge(datSurv, datU[,!names(datU)%in%c(tname)],by = id, all.x = TRUE)
   datSurv$event2<-with(datSurv,ifelse(fuptime!=tt,0,get(ename)))
-  datSurv[,visit.time]<-ifelse(floor(datSurv$fuptime)%%2==0,floor(datSurv$fuptime),floor(datSurv$fuptime)-1)
-  datSurv[,visit.time]<-ifelse(datSurv[,visit.time]>max(data[,visit.time]),
-                               max(data[,visit.time]),datSurv[,visit.time])
+  vtimes<-sort(unique(data[,visit.time]))
+  jj<-findInterval(datSurv$fuptime,vtimes)
+
+  datSurv[, visit.time] <- vtimes[jj]
+
   if(marker_model=="RE")
   {
     datSurv$Yij_1<-datSurv$fixed_1+datSurv$tim_1*datSurv$fuptime

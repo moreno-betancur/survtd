@@ -190,12 +190,16 @@ survtd<-function(formula, data, id,visit.time,model="Cox",method="MICEa",M=5,G=5
                    by = id, all.x = TRUE)
   datSurv$event2 <- with(datSurv, ifelse(fuptime != tt, 0,
                                          get(ename)))
-  datSurv[, visit.time] <- ifelse(floor(datSurv$fuptime)%%2 ==
-                                    0, floor(datSurv$fuptime), floor(datSurv$fuptime) - 1)
-  datSurv[, visit.time] <- ifelse(datSurv[, visit.time] > max(data[,
-                                                                   visit.time]), max(data[, visit.time]), datSurv[, visit.time])
+
+  vtimes<-sort(unique(data[,visit.time]))
+  jj<-findInterval(datSurv$fuptime,vtimes)
+  if(any(jj==0))
+  stop("Survival times cannot occur prior to the first visit time")
+
+  datSurv[, visit.time] <- vtimes[jj]
 
   datLOCF <- data
+  datLOCF<-datLOCF[order(datLOCF[,id],datLOCF[,visit.time]),]
   for (mark in tdnames) datLOCF <- do.call("rbind", by(datLOCF,
                                                        datLOCF[, id], locf, marker = mark, simplify = F))
   datSurv <- merge(datSurv, datLOCF[, c(id, visit.time, tdnames)],
@@ -233,9 +237,6 @@ if(method=="LOCF")     #################  LOCF approach #####################
 # 2. Dataset with one row per individual per observed event-time, with all marker values missing
 #    This will enable imputation of the markers at the exact event-times
 dat2S <- datSurv
-dat2S <- merge(datSurv, datLOCF[, c(id, visit.time, tdnames)],
-               by = c(id, visit.time), all.x = TRUE, sort = F, suffixes = c("",
-                                                                            "y"))
 dat2S[, visit.time] <- dat2S$fuptime
 dat2S[, tdnames] <- NA
 dat2S$ind <- 2
