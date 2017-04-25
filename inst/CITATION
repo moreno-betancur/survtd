@@ -1,0 +1,20 @@
+citHeader("To cite survtd in publications use:")
+
+citEntry(entry = "Article",
+  title        = "Survival analysis with time-dependent covariates subject to measurement error and missing data: Two-stage joint model using multiple imputation",
+  author       = personList(person("Margarita", "Moreno-Betancur"),
+                   as.person("John B. Carlin"),
+                   as.person("Samuel L. Brilleman"),
+                   as.person("Stephanie Tanamas"),
+                   as.person("Anna Peeters"),
+                   as.person("Rory Wolfe")),
+  journal      = "(submitted)",
+  year         = "2016",
+  volume       = "",
+  number       = "",
+  pages        = "",
+  url          = "",
+
+  textVersion  =
+  paste("Moreno-Betancur M, Carlin JB, Brilleman SL, Tanamas S, Peeters A, Wolfe R (2016).",
+  "Survival analysis with time-dependent covariates subject to measurement error and missing data: Two-stage joint model using multiple imputation","(submitted)"))
