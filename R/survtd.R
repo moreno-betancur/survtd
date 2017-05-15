@@ -143,7 +143,7 @@ survtd<-function(formula, data, id,visit.time,model="Cox",method="MICEa",M=5,G=5
                                            1)]
   tdnames <- str_replace(tdnames, "td\\(", "")
   tdnames <- str_replace(tdnames, "\\)", "")
-  if (any(apply(data[,names(data) %in% tdnames], 2, class) != "numeric") & method != "LOCF")
+  if (any(apply(as.data.frame(data[,names(data) %in% tdnames]), 2, class) != "numeric") & method != "LOCF")
     stop("For methods MICEa, MICEb and Naive2S, time-dependent variables must be of class \"numeric\"")
 
 ##################################### Data preparation ##############################################
