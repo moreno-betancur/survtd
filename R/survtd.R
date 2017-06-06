@@ -191,24 +191,55 @@ survtd<-function(formula, data, id,visit.time,model="Cox",method="MICEa",M=5,G=5
   datSurv$event2 <- with(datSurv, ifelse(fuptime != tt, 0,
                                          get(ename)))
 
-  vtimes<-sort(unique(data[,visit.time]))
-  jj<-findInterval(datSurv$fuptime,vtimes)
-  if(any(jj==0))
-  stop("Survival times cannot occur prior to the first visit time")
-
-  datSurv[, visit.time] <- vtimes[jj]
-
-  datLOCF <- data
-  datLOCF<-datLOCF[order(datLOCF[,id],datLOCF[,visit.time]),]
-  for (mark in tdnames) datLOCF <- do.call("rbind", by(datLOCF,
-                                                       datLOCF[, id], locf, marker = mark, simplify = F))
-  datSurv <- merge(datSurv, datLOCF[, c(id, visit.time, tdnames)],
-                   by = c(id, visit.time), all.x = TRUE, sort = F, suffixes = c("","y"))
 
 ######################################## ANALYSIS ######################################################
 
 if(method=="LOCF")     #################  LOCF approach #####################
 {
+
+  # Prepare dataset with LOCF imputations
+
+
+  # This old method worked only for a set of common visit times across individuals:
+
+  # vtimes<-sort(unique(data[,visit.time]))
+  # jj<-findInterval(datSurv$fuptime,vtimes)
+  # if(any(jj==0))
+  #   stop("Survival times cannot occur prior to the first visit time")
+  #
+  # datSurv[, visit.time] <- vtimes[jj]
+  #
+  # datLOCF <- data
+  # datLOCF<-datLOCF[order(datLOCF[,id],datLOCF[,visit.time]),]
+  # for (mark in tdnames) datLOCF <- do.call("rbind", by(datLOCF,
+  #                                                      datLOCF[, id], locf, marker = mark, simplify = F))
+  # datSurv <- merge(datSurv, datLOCF[, c(id, visit.time, tdnames)],
+  #                  by = c(id, visit.time), all.x = TRUE, sort = F, suffixes = c("","y"))
+
+
+
+  etimes<-c(0,times)
+  datLOCF <- data
+  datLOCF<-datLOCF[order(datLOCF[,id],datLOCF[,visit.time]),]
+  for (mark in tdnames) datLOCF <- do.call("rbind", by(datLOCF,
+                                                       datLOCF[, id], locf, marker = mark, simplify = F))
+
+  jj<-findInterval(datLOCF[,visit.time],etimes)
+
+  if(any(jj==0))
+    stop("Visit times cannot occur prior to time 0")
+
+  datLOCF$time <- etimes[jj]
+  datSurv$time<-datSurv$tstart
+  datLOCF<-datLOCF[!duplicated(datLOCF[,c(id,"time")]),]
+  datSurv <- merge(datSurv, datLOCF[, c(id, "time", tdnames)],
+                   by = c(id, "time"), all.x = TRUE, all.y=F,sort = T, suffixes = c("","y"))
+
+  for (mark in tdnames) datSurv <- do.call("rbind", by(datSurv,
+                                                       datSurv[, id], locf, marker = mark, simplify = F))
+
+
+
   if (model == "Cox") {
     fit <- coxph(as.formula(paste("Surv(time=tstart,time2=fuptime,event=event2)~",
                                   paste(c(tdnames, fnames), collapse = "+"))),
