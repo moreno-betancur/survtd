@@ -184,9 +184,7 @@ sampler2 <- function(p, data, m, imp, r, visitSequence, fromto, printFlag, ...)
                 namesX<-namesX1[keep]
                 namesZ<-intersect(namesX,namesZ1)
                 z <- z[, namesZ, drop = FALSE]
-                imp[[j]][, i] <- do.call(f,
-                                         args = list(ry, namesX, namesZ, nameG, nam,
-                                                     p$data))
+                imp[[j]][, i] <- mice.impute.lmm(ry, namesX, namesZ, nameG, nam,p$data)
               }
               p$data[!r[, j], j] <- imp[[j]][, i]
             } else if (is.passive(theMethod)) {
