@@ -1,5 +1,5 @@
 Package: survtd
-Version: 0.0.0.1
+Version: 0.0.1
 Title: Survival analysis with time-dependent covariates
 Authors@R: c(person("Margarita", "Moreno-Betancur", email = "margarita.moreno@mcri.edu.au", role = c("cre","aut")),
              person("Samuel L", "Brilleman", role = c("ctb")))
