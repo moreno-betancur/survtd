@@ -1,13 +1,9 @@
 #' Fit survival hazard models with time-dependent covariates
 #'
-#' \code{survtd} fits semi-parametric Cox proportional hazards and additive hazards models
-#' with time-fixed covariates (any type) and time-dependent covariates with either of these approaches:
-#' - Multiple Imputation for Joint Modeling (MIJM): Only continuous time-dependent covariates. This is a
-#' a multiple imputation-based two-stage joint modeling approach to deal with missing data and measurement
-#' error. An unadapted version of this approach is also available (unMIJM).
-#' - A simple two-stage approach (simple2S): only continuous time-dependent covariates.
-#' - The last observation carried forward approach (LOCF): Any type of time-dependent covariate
-#'
+#' \code{survtd} fits semi-parametric Cox proportional hazards or additive hazards models
+#' with time-fixed covariates of any type and time-dependent covariates with either of these approaches:
+#' Multiple Imputation for Joint Modeling (MIJM);Unadapted version of that approach (unMIJM);
+#' Simple two-stage approach (simple2S); Last observation carried forward approach (LOCF).
 #'
 #' @export
 #' @param formula A formula object, with the response on the left of a ~ operator, and the terms on the right as regressors.
@@ -28,7 +24,8 @@
 #' joint modeling approach based on multiple imputation to incorporate time-varying continuous covariates (see \strong{Details} section below).
 #' Method "LOCF" uses the Last Observation Carried Forward (LOCF) approach. Method "simple2S" is a simple two-stage approach (see \strong{Details} section below).
 #' @param M Number of imputations to perform for methods "MIJM" and "unMIJM" (ignored if method="LOCF" or "simple2S").
-#' @param G Number of iterations to perform in multiple imputation by chained equations (MICE) algorithm for methods "MIJM" and "unMIJM" (ignored if method="LOCF" or "simple2S").
+#' @param G Number of iterations to perform in multiple imputation by chained equations (MICE) algorithm for methods "MIJM" and "unMIJM"
+#' (ignored if method is "LOCF" or "simple2S").
 #' @param time.trend Formula object with empty left hand side and right hand side expressing a polynomial of "x" which determines the
 #' way time is modeled in the fixed effects part of the linear mixed model for each time-depdent marker (ignored if method="LOCF"). Default is a linear trend
 #' (i.e. include \code{visit.time} as predictor in the model). The random effects part includes a random intercept and slope.
@@ -61,10 +58,11 @@
 #'   The "simple2S" method can be used to fit models with time-fixed covariates of any type
 #'   and multiple continuous time-dependent covariates using a simple two-stage approach.
 #'   This method singly imputes each continuous marker at each event time from its estimated
-#'   trajectory obtained from a linear mixed model including fixed and random effects for functions
-#'   of time and fixed effects for the time-fixed covariates appearing in the formula argument. The
-#'   method thus ignores: the uncertainty in these imputed values, the interrelations between
-#'   the time-dependent markers and the relation between the time-dependent markers and the
+#'   trajectory obtained from a linear mixed model including fixed and random effects for time
+#'   (see description of \code{time.trend} argument) and fixed effects for the time-fixed
+#'   covariates appearing in the formula argument. The method thus ignores: the uncertainty
+#'   in these imputed values, the interrelations between the time-dependent markers and
+#'   the relation between the time-dependent markers and the
 #'   time-to-event process (see Moreno-Betancur et al. 2017).
 #'
 #'   The "LOCF" method can be used with any type of time-fixed and time-varying covariates

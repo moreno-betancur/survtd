@@ -4,7 +4,7 @@
 \alias{survtd}
 \title{Fit survival hazard models with time-dependent covariates}
 \usage{
-survtd(formula, data, id, visit.time, model = "Cox", method = "MICEa",
+survtd(formula, data, id, visit.time, model = "Cox", method = "MIJM",
   M = 5, G = 5, time.trend = as.formula("~x"))
 }
 \arguments{
@@ -27,13 +27,14 @@ a variable that indicates the timing of each measurement visit (see parameter \c
 \item{model}{Indicates which hazard model to fit. Options are "Cox" for the Cox proportional hazard model and "Add" for the semi-parametric
 additive hazards model.}
 
-\item{method}{Indicates which method to use to fit the model. Options are "MICEa", "MICEb", "LOCF" and "Naive2S". Both "MICEa" and "MICEb" use a two-stage
-joint modelling approach based on multiple imputation to incorporate time-varying continuous covariates (see \strong{Details} section below).
-Method "LOCF" uses the Last Observation Carried Forward (LOCF) approach. Method "Naive2S" is the naive two-stage approach (see \strong{Details} section below).}
+\item{method}{Indicates which method to use to fit the model. Options are "MIJM", "unMIJM", "LOCF" and "simple2S". Both "MIJM" and "unMIJM" use a two-stage
+joint modeling approach based on multiple imputation to incorporate time-varying continuous covariates (see \strong{Details} section below).
+Method "LOCF" uses the Last Observation Carried Forward (LOCF) approach. Method "simple2S" is a simple two-stage approach (see \strong{Details} section below).}
 
-\item{M}{Number of imputations to perform for methods "MICEa" and "MICEb" (ignored if method="LOCF" or "Naive2S").}
+\item{M}{Number of imputations to perform for methods "MIJM" and "unMIJM" (ignored if method="LOCF" or "simple2S").}
 
-\item{G}{Number of iterations to perform in multiple imputation by chained equations (MICE) algorithm for methods "MICEa" and "MICEb" (ignored if method="LOCF" or "Naive2S").}
+\item{G}{Number of iterations to perform in multiple imputation by chained equations (MICE) algorithm for methods "MIJM" and "unMIJM"
+(ignored if method is "LOCF" or "simple2S").}
 
 \item{time.trend}{Formula object with empty left hand side and right hand side expressing a polynomial of "x" which determines the
 way time is modeled in the fixed effects part of the linear mixed model for each time-depdent marker (ignored if method="LOCF"). Default is a linear trend
@@ -47,49 +48,51 @@ covariate based on the method chosen, along with standard errors, 95\%  confiden
 This will change in future versions when a proper class of objects and summary and other such methods are developed.
 }
 \description{
-\code{survtd} fits Cox proportional hazards and semi-parametric additive hazards models
-with time-fixed covariates (any type) and time-dependent covariates either with a multiple imputation-based two-stage
-joint modelling approach to deal with missing data and measurement error (only continuous time-dependent covariates),
-a naive two-stage approach (only continuous time-dependent covariates) or the LOCF approach (any type).
+\code{survtd} fits semi-parametric Cox proportional hazards or additive hazards models
+with time-fixed covariates of any type and time-dependent covariates with either of these approaches:
+Multiple Imputation for Joint Modeling (MIJM);Unadapted version of that approach (unMIJM);
+Simple two-stage approach (simple2S); Last observation carried forward approach (LOCF).
 }
 \details{
 The \code{survtd} function can be used to fit the Cox proportional hazards or
   semi-parametric additive hazard models with time-depedent covariates.
 
-  Methods "MICEa" and "MICEb" can be used to fit models with time-fixed
+  Methods "MIJM" and "unMIJM" can be used to fit models with time-fixed
   covariates of any type and multiple continuous time-dependent covariates.
   To deal with the discrete-time observation of the time-varying covariates,
   particularly measurement error and missing data, a two-stage joint modeling approach
   is used that is based on multiple imputation. Details are provided in Moreno-Betancur
-  et al. (2016), but briefly, in Stage 1 the true (error-corrected) values of the
+  et al. (2017), but briefly, in Stage 1 the true (error-corrected) values of the
   time-dependent covariates at each event time at which an individual is at risk are multiply
   imputed by drawing iteratively from smoothed trajectories based on interdependent
   linear mixed models using Multiple Imputation by Chained Equations (MICE).
-  An adaptation of the \code{mice} function from the \emph{mice} package is used for this step.
+  An adaptation of the \code{mice} function from the \emph{mice} package is used for this step,
+  largely based on the procedure developed by Moreno-Betancur and Chavance (2016).
   In Stage 2, the time-to-event model is fitted to each of the imputed datasets
   (see below) and estimates are pooled using Rubin's MI formulas.
 
-  The two MICE methods differ in the way information about the event occurrence is
-  included in the imputation models: the "MICEb" method includes the
-  the event indicator, while the "MICEa" approach is based on a more refined
-  approximation including a modified event indicator (see Moreno-Betancur et al. 2016).
-  Hence, the approach "MICEa" is generally preferable.
+  The two methods "MIJM" and "unMIJM" differ in the way information about the event occurrence is
+  included in the imputation models: the "unMIJM" method includes the
+  the event indicator, while the "MIJM" approach is based on a more refined
+  approximation including a modified event indicator (see Moreno-Betancur et al. 2017).
+  Hence, the approach "MIJM" is generally preferable.
 
-  The "Naive2S" method can be used to fit models with time-fixed covariates of any type
-  and multiple continuous time-dependent covariates using the naive two-stage approach.
+  The "simple2S" method can be used to fit models with time-fixed covariates of any type
+  and multiple continuous time-dependent covariates using a simple two-stage approach.
   This method singly imputes each continuous marker at each event time from its estimated
   trajectory obtained from a linear mixed model including fixed and random effects for time
-  and fixed effects for the time-fixed covariates appearing in the formula argument. The
-  method thus ignores: the uncertainty in these imputed values, the interrelations between
-  the time-dependent markers and the relation between the time-dependent markers and the
-  time-to-event process (see Moreno-Betancur et al. 2016).
+  (see description of \code{time.trend} argument) and fixed effects for the time-fixed
+  covariates appearing in the formula argument. The method thus ignores: the uncertainty
+  in these imputed values, the interrelations between the time-dependent markers and
+  the relation between the time-dependent markers and the
+  time-to-event process (see Moreno-Betancur et al. 2017).
 
   The "LOCF" method can be used with any type of time-fixed and time-varying covariates
   (categorical or continuous). This approach uses the last available measurement of the
   time-varying covariate to singly impute its value at each event time at which an
   individual is at risk. It can perform very poorly if the observations are not
   synchronously updated across individuals (e.g. due to missing data) and if the
-  time-varying covariates are measured with error (see Moreno-Betancur et al. 2016).
+  time-varying covariates are measured with error (see Moreno-Betancur et al. 2017).
 
   Once the values of the time-dependent covariates are imputed at each of the event-times at which
   the individual is at risk according to either of the four methods,
@@ -105,11 +108,11 @@ The \code{survtd} function can be used to fit the Cox proportional hazards or
 
   survtd(Surv(time=tt,event=event)~Z1+Z2+td(Yij_1)+td(Yij_2)+td(Yij_3),
          data=dat,  id="ID", visit.time="tj", model="Add",
-         method="MICEa", M=5, G=5,time.trend=as.formula("~x+I(x^2)"))
+         method="MIJM", M=5, G=5,time.trend=as.formula("~x+I(x^2)"))
 
   survtd(Surv(time=tt,event=event)~Z1+Z2+td(Yij_1)+td(Yij_2)+td(Yij_3),
          data=dat,  id="ID", visit.time="tj", model="Add",
-         method="Naive2S", M=5, G=5,time.trend=as.formula("~x+I(x^2)"))
+         method="simple2S", M=5, G=5,time.trend=as.formula("~x+I(x^2)"))
 
   survtd(Surv(time=tt,event=event)~Z1+Z2+td(Yij_1)+td(Yij_2)+td(Yij_3),
          data=dat,  id="ID", visit.time="tj", model="Add",
@@ -119,6 +122,12 @@ The \code{survtd} function can be used to fit the Cox proportional hazards or
 
 }
 \references{
-Moreno-Betancur M, Carlin JB, Brilleman SL, Tanamas S, Peeters A, Wolfe R (2016). Survival analysis with
-time-dependent covariates subject to measurement error and missing data: Two-stage joint model using multiple imputation. Submitted.
+Moreno-Betancur M, Carlin JB, Brilleman SL, Tanamas S, Peeters A, Wolfe R (2017). Survival analysis
+with time-dependent covariates subject to missing data or measurement error: Multiple Imputation for Joint Modeling (MIJM).
+\emph{Submitted}.
+
+Moreno-Betancur M., Chavance M. (2016) Sensitivity analysis of incomplete
+longitudinal data departing from the missing at random assumption: Methodology
+and application in a clinical trial with drop-outs. \emph{Statistical methods in medical research}, 25 (4), 1471-1489
+[Epub ahead of print, May 22 2013]
 }

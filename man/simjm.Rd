@@ -65,7 +65,7 @@ The user can specify various characteristics of these distributions.
 }
 \details{
 The function can be used to generate data from any of the scenarios considered in the the main simulation settings
-of Moreno-Betancur et al. (2016). See that reference for details.
+of Moreno-Betancur et al. (2017). See that reference for details.
 }
 \examples{
 
@@ -81,6 +81,7 @@ of Moreno-Betancur et al. (2016). See that reference for details.
 
 }
 \references{
-Moreno-Betancur M, Carlin JB, Brilleman SL, Tanamas S, Peeters A, Wolfe R (2016). Survival analysis with
-time-dependent covariates subject to measurement error and missing data: Two-stage joint model using multiple imputation. Submitted.
+Moreno-Betancur M, Carlin JB, Brilleman SL, Tanamas S, Peeters A, Wolfe R (2017). Survival analysis
+with time-dependent covariates subject to missing data or measurement error: Multiple Imputation for Joint Modeling (MIJM).
+\emph{Submitted}.
 }

@@ -5,13 +5,11 @@ survtd
 
 [![License](License-GPL-image.svg)](http://www.gnu.org/licenses/gpl-3.0.html)
 
-**survtd** is an R package to fit Cox or additive hazards regression models with time-fixed covariates (any type) and time-dependent covariates subject to missing data or measurement error, using any of the following approaches:
+**survtd** is an R package to fit semi-parametric Cox or additive hazards regression models with time-fixed covariates of any type and multiple continuous time-dependent covariates subject to missing data, measurement error or simply observed in discrete time.
 
--   Multiple Imputation for Joint Modeling (MIJM): The multiple imputation-based two-stage joint modeling approach developed by Moreno-Betancur et al. (2017). Briefly, it uses an adapted multiple imputation by chained equations (MICE) procedure to impute true values of each marker at each event time. An unadapted version of this approach is also available (unMIJM). Only for continuous time-dependent covariates.
+All these issues are handled with the two-stage Multiple Imputation for Joint Modeling (MIJM) approach developed by Moreno-Betancur et al. (2017). Briefly, the MIJM approach uses an adapted multiple imputation by chained equations procedure to impute true values of each marker at each event time.
 
--   Simple two-stage approach (simple2S): Single imputation of true values of each marker at each event time from estimated trajectories based on linear mixed models. Only for continuous time-dependent covariates.
-
--   Last observation carried forward approach (LOCF): Single imputation of each marker at each event time by the last value observed. Time-dependent covariates of any type.
+The package also provides easy-to-use implementations of an unadapted version of the approach (unMIJM); a simple two-stage approach (simple2S), based on single imputation of the continuous markers from linear mixed models; and the last observation carried forward (LOCF) approach for time-dependent covariates of any type, which is the traditional method to incoporate these in hazard models. Data simulation functions also included.
 
 **Note:** Please note that the version available on GitHub is the most up-to-date *development* version of the package. A stable version of the package will be available from CRAN once it is released.
 

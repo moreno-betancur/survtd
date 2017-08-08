@@ -5,14 +5,17 @@ Authors@R: c(person("Margarita", "Moreno-Betancur", email = "margarita.moreno@mc
              person("Samuel L", "Brilleman", role = c("ctb")))
 Depends: R (>= 3.1.0), lme4, survival, timereg, mice
 Imports: boot, ipw, stringr, MASS, Matrix
-Description: Fit the Cox proportional hazards model or the semi-parametric additive hazards 
-             model with time-fixed covariates of any type and continuous time-dependent covariates 
-             subject to measurement error, missing data, or simply observed in discrete time: these 
-             issues are all handled with a two-stage joint modelling approach using multiple imputation 
-             (see Moreno-Betancur et al. 2016). The package also provides a naive two-stage approach 
-             (Naive2S, for comparison) and an easy-to-use implementation of the last observation carried 
-             forward (LOCF) approach which is the traditional method to incoporate time-dependent 
-             covariates of any type in hazard models. Data simulation functions also included.
+Description: Fit semi-parametric Cox or additive hazards regression models with time-
+             fixed covariates of any type and multiple continuous time-dependent covariates 
+             subject to missing data, measurement error or simply observed in discrete time: 
+             all these issues are handled with the two-stage Multiple Imputation for
+             Joint Modeling (MIJM) approach developed by Moreno-Betancur et al. (2017). 
+             The package also provides easy-to-use implementations of an unadapted version
+             (unMIJM); a simple two-stage approach (simple2S), based on single imputation 
+             of the continuous markers from linear mixed models; and the last observation 
+             carried forward (LOCF) approach for time-dependent covariates of any type, 
+             which is the traditional method to incoporate these in hazard models. 
+             Data simulation functions also included.
 License: GPL (>= 3)
 LazyData: TRUE
 RoxygenNote: 6.0.1
