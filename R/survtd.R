@@ -2,10 +2,10 @@
 #'
 #' \code{survtd} fits semi-parametric Cox proportional hazards and additive hazards models
 #' with time-fixed covariates (any type) and time-dependent covariates with either of these approaches:
-#' - Multiple Imputation for Joint Modeling (MIJM): only continuous time-dependent covariates. This is
+#' - Multiple Imputation for Joint Modeling (MIJM): Only continuous time-dependent covariates. This is a
 #' a multiple imputation-based two-stage joint modeling approach to deal with missing data and measurement
 #' error. An unadapted version of this approach is also available (unMIJM).
-#' - A simple two-stage approach (simple2S): only continuous time-dependent covariates
+#' - A simple two-stage approach (simple2S): only continuous time-dependent covariates.
 #' - The last observation carried forward approach (LOCF): Any type of time-dependent covariate
 #'
 #'
