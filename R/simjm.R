@@ -16,7 +16,7 @@
 #' @param effects Strength of effects of the markers on the hazard. Options are "Null", "Weak" and "Strong".
 #' @param corr Degree of marginal pairwise correlations between the markers. Options are "Low", "Mod" and "High".
 #' @details The function can be used to generate data from any of the scenarios considered in the the main simulation settings
-#' of Moreno-Betancur et al. (2016). See that reference for details.
+#' of Moreno-Betancur et al. (2017). See that reference for details.
 #' @return A data.frame as required by \code{\link[survtd]{survtd}}. That is, in the long format, with one row per individual and
 #' per visit time at which any of the time-dependent covariates were measured, with the corresponding measurements. The dataset also
 #' includes a variable that uniquely identifies observations from the same individual; a variable that indicates the timing
@@ -49,8 +49,10 @@
 #'   \item{tim_3}{Time-dependent part of the linear predictor of the linear mixed model from which Yij_3 is generated,
 #'                excluding terms for other markers in the case of product-normal model.}
 #' }
-#'@references Moreno-Betancur M, Carlin JB, Brilleman SL, Tanamas S, Peeters A, Wolfe R (2016). Survival analysis with
-#' time-dependent covariates subject to measurement error and missing data: Two-stage joint model using multiple imputation. Submitted.
+#'@references
+#'Moreno-Betancur M, Carlin JB, Brilleman SL, Tanamas S, Peeters A, Wolfe R (2017). Survival analysis
+#'with time-dependent covariates subject to missing data or measurement error: Multiple Imputation for Joint Modeling (MIJM).
+#'\emph{Submitted}.
 #'
 #'@examples
 #'

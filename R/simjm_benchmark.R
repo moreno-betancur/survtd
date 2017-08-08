@@ -10,15 +10,17 @@
 #' @param marker_model Multiple marker model that was used to generate \code{data}. Options are "RE" for the correlated random effects model and "PN" for the
 #' product normal model.
 #' @param corr Degree of marginal pairwise correlations between the markers that was used to generate \code{data}. Options are "Low", "Mod" and "High".
-#' @details The function is used to perform what is referred to as the "True" analysis in Moreno-Betancur et al. (2016) which is based on perfect data,
+#' @details The function is used to perform what is referred to as the "True" analysis in Moreno-Betancur et al. (2017) which is based on perfect data,
 #' i.e. the true values of the markers at each of the event times as drawn from the simulation model. This provides a benchmark for analyses performed
 #' with error-polluted and incomplete data using \code{\link[survtd]{survtd}}.
 #'
 #'@return Returns regression coefficient estimates for each covariate based on the "True" analysis, along with 95%
 #'   confidence intervals and p-values.
 #'
-#'@references Moreno-Betancur M, Carlin JB, Brilleman SL, Tanamas S, Peeters A, Wolfe R (2016). Survival analysis with
-#' time-dependent covariates subject to measurement error and missing data: Two-stage joint model using multiple imputation. Submitted.
+#'@references
+#'Moreno-Betancur M, Carlin JB, Brilleman SL, Tanamas S, Peeters A, Wolfe R (2017). Survival analysis
+#'with time-dependent covariates subject to missing data or measurement error: Multiple Imputation for Joint Modeling (MIJM).
+#'\emph{Submitted}.
 #'
 #'@examples
 #'
