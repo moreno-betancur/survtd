@@ -113,97 +113,42 @@ sampler2 <- function(p, data, m, imp, r, visitSequence, fromto, printFlag, ...)
           }
 
           ## iterate once over the variables of the augmented model
-
           for (j in p$visitSequence) {
             theMethod <- p$method[j]
             vname <- dimnames(p$data)[[2]][j]
 
-            ## store current state
-            oldstate <- get("state", pos = parent.frame())
-            newstate <- list(it = k, im = i, co = j, dep = vname, meth = theMethod, log = oldstate$log)
-            assign("state", newstate, pos = parent.frame(), inherits = TRUE)
+            # ## store current state
+            # oldstate <- get("state", pos = parent.frame())
+            # newstate <- list(it = k, im = i, co = j, dep = vname, meth = theMethod, log = oldstate$log)
+            # assign("state", newstate, pos = parent.frame(), inherits = TRUE)
 
-            if (printFlag & theMethod != "dummy")
+            if (printFlag)
               cat(" ", vname)
-            if (theMethod != "" & (!is.passive(theMethod)) & theMethod != "dummy") {
-              # for a true imputation method
-              if (substring(tolower(theMethod), 1, 2) != "2l" &
-                    substr(theMethod,1,3) != "lmm") {
-                # RJ: for an non-multilevel imputation method
-                # RB: formula-based  specification
-                if (! is.null(p$form) && nchar(p$form[j])>0) {
-                  myform <- paste(p$form[j], "0", sep="+")
-                  x <- model.matrix(formula(myform), p$data)
-                } else
-                  x <- p$data[, p$predictorMatrix[j, ] == 1, drop = FALSE]
-                y <- p$data[, j]
-                ry <- r[, j]
-                nam <- vname
-                if (k == 1)
-                  check.df(x, y, ry, ...)  # added 31/10/2012, throw warning for n(obs) < p case
-                f <- paste("mice.impute", theMethod, sep = ".")
-                keep <- remove.lindep(x, y, ry, ...)
-                x <- x[, keep, drop = FALSE]
-                imp[[j]][, i] <- do.call(f, args = list(y, ry, x, ...))
-              } else if (substring(theMethod, 1, 2) == "2l"){
-                # for a multilevel imputation method
-                predictors <- p$predictorMatrix[j, ] != 0
-                # RB: formula-based specification
-                if (! is.null(p$form) && nchar(p$form[j])>0) {
-                  myform <- paste(p$form[j], "0", sep="+")
-                  x <- model.matrix(formula(myform), p$data)
-                } else
-                  x <- p$data[, predictors, drop = FALSE]
-                y <- p$data[, j]
-                ry <- r[, j]
-                type <- p$predictorMatrix[j, predictors]
-                nam <- vname
-                if (k == 1)
-                  check.df(x, y, ry, ...)  # added 31/10/2012, throw warning for n(obs) < p case
-                f <- paste("mice.impute", tolower(theMethod), sep = ".")
-                keep <- remove.lindep(x, y, ry, ...)
-                x <- x[, keep, drop = FALSE]
-                type <- type[keep]
-                imp[[j]][, i] <- do.call(f, args = list(y, ry, x, type, ...))
-              } else if(substring(theMethod, 1, 3) == "lmm"){
+
+             if(theMethod == "lmm"){
                 predictors_fixed <- p$predictorMatrix[j, ]>0
                 predictors_random<- p$predictorMatrix[j, ] ==2
                 group <- p$predictorMatrix[j, ] ==-2
                 x <- p$data[, predictors_fixed, drop = FALSE]
-                z <- p$data[, predictors_random, drop = FALSE]
+                #z <- p$data[, predictors_random, drop = FALSE]
                 y <- p$data[, j]
                 ry <- r[, j]
-                nam <- dimnames(p$data)[[2]][j]
-                namesX1<-dimnames(p$data)[[2]][predictors_fixed]
-                namesZ1<-dimnames(p$data)[[2]][predictors_random]
-                nameG<-dimnames(p$data)[[2]][group]
-                nameG<-strsplit(as.character(nameG[1]),split="\\.")[[1]][1]
-                f <- paste("mice.impute", theMethod, sep = ".")
+                nn<-dimnames(p$data)[[2]]
+                nam <- nn[j]
+                namesX1<-nn[predictors_fixed]
+                namesZ1<-nn[predictors_random]
+                nameG<-nn[group]
+                #nameG<-strsplit(as.character(nameG[1]),split="\\.")[[1]][1]
                 keep <- remove.lindep(x, y, ry)
-                x<- x[, keep, drop = FALSE]
+                #x<- x[, keep, drop = FALSE]
                 namesX<-namesX1[keep]
                 namesZ<-intersect(namesX,namesZ1)
-                z <- z[, namesZ, drop = FALSE]
-                imp[[j]][, i] <- mice.impute.lmm(ry, namesX, namesZ, nameG, nam,p$data)
+                #z <- z[, namesZ, drop = FALSE]
+                dat<-p$data
+                imp[[j]][, i] <- mice.impute.lmm(ry, namesX, namesZ, nameG, nam,dat)
               }
               p$data[!r[, j], j] <- imp[[j]][, i]
-            } else if (is.passive(theMethod)) {
-              imp[[j]][, i] <- model.frame(as.formula(theMethod), p$data[!r[, j], ])  #RJ - FIXED passive imputation: as.formula()
-              p$data[!r[, j], j] <- imp[[j]][, i]
-            } else if (theMethod == "dummy") {
-              ## FEH
-              cat.columns <- p$data[, p$categories[j, 4]]
-              p$data[, (j:(j + p$categories[p$categories[j, 4], 2] - 1))] <- matrix((model.matrix(~cat.columns - 1)[,
-                                                                                                                    -1]), ncol = p$categories[p$categories[j, 4], 2], nrow = nrow(p$data))
-              remove("cat.columns")
-            }
 
-            ## optional post-processing
-            cmd <- p$post[j]  # SvB Aug 2009
-            if (cmd != "") {
-              eval(parse(text = cmd))
-              p$data[!r[, j], j] <- imp[[j]][, i]
-            }
           }  # end j loop
         }  # end i loop
         k2 <- k - from + 1
