@@ -124,7 +124,7 @@ The \code{survtd} function can be used to fit the Cox proportional hazards or
 \references{
 Moreno-Betancur M, Carlin JB, Brilleman SL, Tanamas S, Peeters A, Wolfe R (2017). Survival analysis
 with time-dependent covariates subject to missing data or measurement error: Multiple Imputation for Joint Modeling (MIJM).
-\emph{Submitted}.
+\emph{Biostatistics} [Epub ahead of print 12 Oct 2017].
 
 Moreno-Betancur M., Chavance M. (2016) Sensitivity analysis of incomplete
 longitudinal data departing from the missing at random assumption: Methodology

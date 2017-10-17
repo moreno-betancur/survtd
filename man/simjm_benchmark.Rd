@@ -42,5 +42,5 @@ with error-polluted and incomplete data using \code{\link[survtd]{survtd}}.
 \references{
 Moreno-Betancur M, Carlin JB, Brilleman SL, Tanamas S, Peeters A, Wolfe R (2017). Survival analysis
 with time-dependent covariates subject to missing data or measurement error: Multiple Imputation for Joint Modeling (MIJM).
-\emph{Submitted}.
+\emph{Biostatistics} [Epub ahead of print 12 Oct 2017].
 }
