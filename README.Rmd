@@ -52,9 +52,8 @@ An example of usage of the package will be added soon.
 If you find any bugs, please report them via email to [Margarita Moreno-Betancur](mailto:margarita.moreno@mcri.edu.au).
 
 ## References
-Moreno-Betancur M, Carlin JB, Brilleman SL, Tanamas S, Peeters A, Wolfe R (2017). Survival analysis
-with time-dependent covariates subject to missing data or measurement error: Multiple Imputation for Joint Modeling (MIJM).
-*Submitted*.
+Moreno-Betancur M, Carlin JB, Brilleman SL, Tanamas S, Peeters A, Wolfe R (2017). [Survival analysis
+with time-dependent covariates subject to missing data or measurement error: Multiple Imputation for Joint Modeling (MIJM).](https://academic.oup.com/biostatistics/article-abstract/doi/10.1093/biostatistics/kxx046/4461848/Survival-analysis-with-time-dependent-covariates?redirectedFrom=fulltext) *Biostatistics* [Epub ahead of print 12 Oct 2017].
 
 Moreno-Betancur M., Chavance M. (2016) [Sensitivity analysis of incomplete longitudinal data departing 
 from the missing at random assumption: Methodology and application in a clinical trial with drop-outs.](http://journals.sagepub.com/doi/abs/10.1177/0962280213490014) *Statistical methods in medical research*, 25 (4), 1471-1489 [Epub ahead of print, May 22 2013].
