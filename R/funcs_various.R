@@ -92,8 +92,12 @@ summ.aalen<-function(fit)
 
 summ.cox<-function(fit)
 {
+  if(length(summary(fit)$coef[,c("coef")])!=1)
   out<-data.frame(summary(fit)$coef[,c("coef")],summary(fit)$coef[,c("se(coef)")],
-                  log(summary(fit)$conf.int[,3:4]),summary(fit)$coef[,5])
+                  log(summary(fit)$conf.int[,3:4]),summary(fit)$coef[,5]) else
+  out<-data.frame(t(c(summary(fit)$coef[,c("coef")],summary(fit)$coef[,c("se(coef)")],
+                  log(summary(fit)$conf.int[,3:4]),summary(fit)$coef[,5])))                  
+                    
   names(out)<-c("logHR","SE","CIlow","CIupp","p-value")
   return(out)
 }
