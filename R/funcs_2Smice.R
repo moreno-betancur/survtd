@@ -442,7 +442,7 @@ mice2<-function (data, m = 5, method = vector("character", length = ncol(data)),
   visitSequence <- setup$visitSequence
   post <- setup$post
   p <- padModel(data, method, predictorMatrix, visitSequence,
-                form, post, nmis, nvar)
+                form, post, nvar)
   if (sum(duplicated(names(p$data))) > 0)
     stop("Column names of padded data should be unique")
   r <- (!is.na(p$data))
