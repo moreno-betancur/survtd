@@ -44,15 +44,14 @@ First we use the `simjm` function to generate an example dataset of n=200 indivi
 ``` r
 set.seed(33833)
 
-dat <- simjm(n = 200, surv_model = "Cox", marker_model = "RE", MErr = "Low", 
-    Miss = "High", effects = "Strong", corr = "Mod")
+dat<-simjm(n=200,surv_model="Cox",marker_model="RE", MErr="Low",Miss="High",effects="Strong",corr="Mod")
 ```
 
 The variables one would observe in a real study are in the first nine columns, so we will discard the rest which relate to further aspects only available due to knowledge of the data generating model in this simulation context. They are there only so that the true parameter estimates can be easily recovered through the `simjm_benchmark` function (of interest to methodologists).
 
 ``` r
-dat <- dat[, 1:9]
-round(head(dat), 2)
+dat<-dat[,1:9]
+round(head(dat),2)
 #>    ID   tt event Z1    Z2 tj  Yij_1  Yij_2  Yij_3
 #> 1   1 2.43     1  1 54.71  0 138.00 136.07 153.32
 #> 2   1 2.43     1  1 54.71  1     NA     NA 148.73
@@ -81,9 +80,10 @@ We aim to obtain reliable estimates of the effects of markers `Yij_1`, `Yij_2` a
 The approach is applied using a single call to the `survtd` function, as follows:
 
 ``` r
-fitMIJM <- survtd(Surv(time = tt, event = event) ~ Z1 + Z2 + td(Yij_1) + td(Yij_2) + 
-    td(Yij_3), data = dat, id = "ID", visit.time = "tj", model = "Cox", method = "MIJM", 
-    M = 5, G = 5, time.trend = as.formula("~x+I(x^2)+I(x^3)"))
+fitMIJM<-survtd(Surv(time=tt,event=event)~Z1+Z2+td(Yij_1)+td(Yij_2)+td(Yij_3),
+                 data=dat,  id="ID", visit.time="tj", model="Cox",
+                 method="MIJM", M=5, G=5,time.trend=as.formula("~x+I(x^2)+I(x^3)"))
+#> Warning: Number of logged events: 1
 
 
 # Full results in log-hazard scale:
@@ -97,8 +97,8 @@ fitMIJM["Results"]
 #> Z2     0.063101396 0.01567799  0.03114770 0.09505509 0.0003331663
 
 # Estimates and CIs in hazard ratio scale:
-res <- round(exp(fitMIJM["Results"][[1]][, c(1, 3, 4)]), 2)
-names(res)[1] <- "HR"
+res<-round(exp(fitMIJM["Results"][[1]][,c(1,3,4)]),2)
+names(res)[1]<-"HR"
 res
 #>         HR CIlow CIupp
 #> Yij_1 1.01  0.98  1.04
